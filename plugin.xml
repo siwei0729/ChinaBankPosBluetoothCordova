@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="cordova-china-bank-pos-bluetooth"
+    version="1.0.0">
+    <name>Cordova China Bank Pos Bluetooth</name>
+    <description>For Visa and master card transaction</description>
+    <license>MIT</license>
+    <keywords></keywords>
+    <repo>https://github.com/siwei0729/ChinaBankPosBluetoothCordova</repo>
+    <issue></issue>
+
+    <!-- android -->
+    <platform name="android">
+      <js-module src="www/plugin.js" name="plugin">
+        <runs/>
+
+        <!-- This is the window variable name you want, like window.MyCordovaPlugin -->
+        <clobbers target="ChinaBankPos" />
+      </js-module>
+      <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="ChinaBankPos">
+          <param name="android-package" value="com.example.ChinaBankPos" />
+          <param name="onload" value="true" />
+        </feature>
+      </config-file>
+
+      <source-file src="src/android/com/example/ChinaBankPos.java" target-dir="src/com/example/" />
+    </platform>
+
+</plugin>
