@@ -35,10 +35,26 @@ public class ChinaBankPos extends CordovaPlugin {
 
         if (action.equals("sale")) {
             sale(args);
-        } 
+        }else if (action.equals("refund")){
+            refund(args);
+        }
         return true;
     }
+    public void refund(JSONArray args) throws JSONException {
+        String transId = args.getString(0);
 
+        Intent intent_mpos = new Intent();
+        intent_mpos.setClassName("com.bocs.mpos", "com.bocs.mpos.activity.TransQueryActivity");
+
+        Bundle bundle = new Bundle();
+        bundle.putString("sSysUniqueID", transId);
+        bundle.putString("sTransTypeInd", "1");
+        bundle.putString("sRemark", "refund");
+
+        intent_mpos.putExtras(bundle);
+        this.cordova.startActivityForResult(this,intent_mpos, REFUND);
+
+    }
     public void sale(JSONArray args) throws JSONException {
         String amount = args.getString(0);
         String transId = args.getString(1);
@@ -67,10 +83,9 @@ public class ChinaBankPos extends CordovaPlugin {
 
         if (requestCode == SALE) {
             if (resultCode == RESULT_CANCELED) {
-
+                callbackContext.error("User Canceled");
             } else if (resultCode == RESULT_OK) {
                 String response_code = data.getExtras().getString("sResponseCode");
-                String response_desc = data.getExtras().getString("sResponseDesc");
                 String sSysUniqueID = data.getExtras().getString("sSysUniqueID");
 
                 if ("SS00".equals(response_code) || "00".equals(response_code) || "0000".equals(response_code)) {
@@ -79,6 +94,20 @@ public class ChinaBankPos extends CordovaPlugin {
                 } else {
                     //fail
                     callbackContext.error("Transaction Fail");
+                }
+            }
+        }else if (requestCode == REFUND) {
+            if (resultCode == RESULT_CANCELED) {
+                callbackContext.error("User Canceled");
+            } else if (resultCode == RESULT_OK) {
+                String response_code = data.getExtras().getString("sResponseCode");
+
+                if ("SS00".equals(response_code) || "00".equals(response_code) || "0000".equals(response_code)) {
+                    //success
+                    callbackContext.success();
+                } else {
+                    //fail
+                    callbackContext.error("Fail to void");
                 }
             }
         }
