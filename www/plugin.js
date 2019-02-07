@@ -13,7 +13,17 @@ var ChinaBankPos = {
         return new Promise(function (resolve, reject) {
             exec(resolve, reject, PLUGIN_NAME, 'refund', [transId]);
         });
-    }
+    },
+    login: function (package,className) {
+         return new Promise(function (resolve, reject) {
+             exec(resolve, reject, PLUGIN_NAME, 'login', [package,className]);
+            });
+        },
+    checkMpos: function (package) {
+           return new Promise(function (resolve, reject) {
+               exec(resolve, reject, PLUGIN_NAME, 'checkMpos', [package]);
+                });
+         }
 };
 
 module.exports = ChinaBankPos;

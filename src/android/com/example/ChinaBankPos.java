@@ -11,9 +11,19 @@ import org.apache.cordova.PluginResult.Status;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Build;
+import android.database.Cursor;
+import android.content.ContentResolver;
+import android.content.ComponentName;
 import android.util.Log;
+import android.app.ActivityManager;
+import android.content.Context;
+import java.util.List;
+import android.net.Uri;
+import android.app.ActivityManager.RunningServiceInfo;
 
 public class ChinaBankPos extends CordovaPlugin {
     private static final String TAG = "ChinaBankPos";
@@ -22,6 +32,7 @@ public class ChinaBankPos extends CordovaPlugin {
 
     public static final int SALE = 1;
     public static final int REFUND = 2;
+    public static final int LOGIN = 3;
     CallbackContext callbackContext = null;
 
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -37,8 +48,46 @@ public class ChinaBankPos extends CordovaPlugin {
             sale(args);
         }else if (action.equals("refund")){
             refund(args);
+        }else if (action.equals("login")){
+            login(args);
+        }
+        else if (action.equals("checkMpos")){
+           checkMpos(this.cordova.getActivity().getApplicationContext());
         }
         return true;
+    }
+    public void checkMpos(Context context) {
+        int num = 100;
+        String processName = "com.bocs.mpos";
+        ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<RunningServiceInfo> runningServiceInfos = activityManager
+                .getRunningServices(num);
+        for (RunningServiceInfo rsi : runningServiceInfos) {
+            if (rsi.process.equals(processName))
+                callbackContext.success(1);
+        }
+        if (Build.VERSION.SDK_INT >= 26) {
+            try {
+                ContentResolver resolver = context.getContentResolver();
+                Uri uri = Uri.parse("content://com.bocs.mpos.provider/tb_login");
+                Cursor cursor = resolver.query(uri, new String[]{"isLogin"}, null, null, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    while (cursor.moveToNext()) {
+                        int isLogin = cursor.getInt(cursor.getColumnIndex("isLogin"));
+                        if (isLogin == 1) {
+                            cursor.close();
+                          // return true;
+                            callbackContext.success(1);
+                        }
+                    }
+                    cursor.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        callbackContext.success(0);
     }
     public void refund(JSONArray args) throws JSONException {
         String transId = args.getString(0);
@@ -76,6 +125,25 @@ public class ChinaBankPos extends CordovaPlugin {
         this.cordova.startActivityForResult(this,intent_mpos, SALE);
     }
 
+    public void login(JSONArray args) throws JSONException {
+        String packageName = args.getString(0);
+        String className = args.getString(1);
+
+
+        Intent intent_mpos = new Intent(Intent.ACTION_MAIN);
+        intent_mpos.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ComponentName comp=new ComponentName("com.bocs.mpos", "com.bocs.mpos.activity.WelcomeActivity");
+        intent_mpos.setComponent(comp);
+        Bundle bundle = new Bundle();
+        bundle.putString("package", packageName);
+        bundle.putString("className", className);
+        bundle.putString("modeType", "2");
+        bundle.putBoolean("isOnlineSign", true);
+
+        intent_mpos.putExtras(bundle);
+        this.cordova.startActivityForResult(this,intent_mpos,LOGIN);
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -111,7 +179,12 @@ public class ChinaBankPos extends CordovaPlugin {
                 }
             }
         }
-
+        else if (requestCode == LOGIN) {
+            if (resultCode == RESULT_CANCELED) {
+                callbackContext.error("User Canceled");
+            }
+            callbackContext.success();
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
