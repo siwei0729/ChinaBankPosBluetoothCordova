@@ -36,7 +36,8 @@ public class ChinaBankPos extends CordovaPlugin {
     public static final int SALE = 1;
     public static final int REFUND = 2;
     public static final int LOGIN = 3;
-    public static final int OCBC_SALE=4;
+    public static final int OCBC=4;
+
     private final DecimalFormat REAL_FORMATTER = new DecimalFormat("0.00");
 
     CallbackContext callbackContext = null;
@@ -62,6 +63,15 @@ public class ChinaBankPos extends CordovaPlugin {
         }
         else if (action.equals("ocbcSale")){
             ocbcSale(args);
+        }
+        else if (action.equals("ocbcVoid")){
+            ocbcVoid(args);
+        }
+        else if (action.equals("ocbcRefund")){
+            ocbcRefund(args);
+        }
+        else if (action.equals("ocbcSettlement")){
+            ocbcSettlement(args);
         }
         return true;
     }
@@ -137,29 +147,30 @@ public class ChinaBankPos extends CordovaPlugin {
 
     public void ocbcSale(JSONArray args) throws JSONException {
         String transaction_amount = args.getString(0);
-        String command_identifier = args.getString(1);
-        String invoice_number = args.getString(2);
+        String transaction_type = args.getString(1);
+        String command_identifier = args.getString(2);
+        String invoice_number = args.getString(3);
 
         Intent launchIntent = new Intent();
         launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
         if (launchIntent != null) {
             launchIntent.setFlags(0);
             Bundle bundleApp = new Bundle();
-            bundleApp.putString("Request", getSaleObject(transaction_amount));
+            bundleApp.putString("Request", getSaleObject(transaction_amount,transaction_type,command_identifier));
             launchIntent.putExtras(bundleApp);
-            this.cordova.startActivityForResult(this,launchIntent, OCBC_SALE);
+            this.cordova.startActivityForResult(this,launchIntent, OCBC);
           }
-
 
     }
 
 
-    private String getSaleObject(String amount) {
+    private String getSaleObject(String amount,String transactionType,String commandIdentifier) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("transaction_amount", getConvertedAmount(amount));
-            jsonObject.put("transaction_type", "C200");
-            jsonObject.put("command_identifier", "1");
+            jsonObject.put("transaction_type", transactionType);
+            jsonObject.put("invoice_number", commandIdentifier);
+            jsonObject.put("command_identifier",commandIdentifier);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -176,7 +187,97 @@ public class ChinaBankPos extends CordovaPlugin {
         return REAL_FORMATTER.format(l);
 
     }
+    public void ocbcVoid(JSONArray args) throws JSONException {
+        String invoice_number = args.getString(0);
+        String command_identifier = args.getString(1);
 
+        Intent launchIntent = new Intent();
+        launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
+        if (launchIntent != null) {
+            launchIntent.setFlags(0);
+            Bundle bundleApp = new Bundle();
+            bundleApp.putString("Request", getVoidObject(invoice_number,command_identifier));
+            launchIntent.putExtras(bundleApp);
+            this.cordova.startActivityForResult(this,launchIntent, OCBC);
+          }
+
+    }
+
+
+    private String getVoidObject(String invNumber,String commandIdentifier) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject.put("invoice_number", invNumber);
+            jsonObject.put("transaction_type", "C300");
+            jsonObject.put("command_identifier", commandIdentifier);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject.toString();
+    }
+    public void ocbcRefund(JSONArray args) throws JSONException {
+        String transaction_amount = args.getString(0);
+        String command_identifier = args.getString(1);
+
+        Intent launchIntent = new Intent();
+        launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
+        if (launchIntent != null) {
+            launchIntent.setFlags(0);
+            Bundle bundleApp = new Bundle();
+            bundleApp.putString("Request", getRefundObject(transaction_amount,command_identifier));
+            launchIntent.putExtras(bundleApp);
+            this.cordova.startActivityForResult(this,launchIntent, OCBC);
+          }
+
+    }
+
+
+    private String getRefundObject(String amount,String commandIdentifier) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject.put("transaction_amount", getConvertedAmount(amount));
+            jsonObject.put("command_identifier", commandIdentifier);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject.toString();
+    }
+    public void ocbcSettlement(JSONArray args) throws JSONException {
+        String transaction_type = args.getString(0);
+        String command_identifier = args.getString(1);
+
+
+        Intent launchIntent = new Intent();
+        launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
+        if (launchIntent != null) {
+            launchIntent.setFlags(0);
+            Bundle bundleApp = new Bundle();
+            bundleApp.putString("Request", getSettlementObject(transaction_type,command_identifier));
+            launchIntent.putExtras(bundleApp);
+            this.cordova.startActivityForResult(this,launchIntent, OCBC);
+          }
+
+    }
+
+
+    private String getSettlementObject(String transactionType,String commandIdentifier) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("transaction_type", transactionType);
+            jsonObject.put("command_identifier",commandIdentifier);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject.toString();
+    }
 
     public void login(JSONArray args) throws JSONException {
         String packageName = args.getString(0);
@@ -201,7 +302,7 @@ public class ChinaBankPos extends CordovaPlugin {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == OCBC_SALE){
+        if(requestCode == OCBC){
             if (resultCode == RESULT_CANCELED) {
                 callbackContext.error("User Canceled");
             }else if (resultCode == RESULT_OK) {
@@ -210,8 +311,7 @@ public class ChinaBankPos extends CordovaPlugin {
                 callbackContext.success(responseData);
             }
 
-
-      }else if (requestCode == SALE) {
+        }else if (requestCode == SALE) {
             if (resultCode == RESULT_CANCELED) {
                 callbackContext.error("User Canceled");
             } else if (resultCode == RESULT_OK) {
