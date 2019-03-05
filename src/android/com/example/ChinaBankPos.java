@@ -53,6 +53,9 @@ public class ChinaBankPos extends CordovaPlugin {
 
         if (action.equals("sale")) {
             sale(args);
+        }
+        if (action.equals("bocUnionPay")) {
+            bocUnionPay(args);
         }else if (action.equals("refund")){
             refund(args);
         }else if (action.equals("login")){
@@ -144,6 +147,28 @@ public class ChinaBankPos extends CordovaPlugin {
         this.cordova.startActivityForResult(this,intent_mpos, SALE);
     }
 
+    public void bocUnionPay(JSONArray args) throws JSONException {
+        String amount = args.getString(0);
+        String transId = args.getString(1);
+        String phone = args.getString(2);
+        String email = args.getString(3);
+
+
+
+        Intent intent_mpos = new Intent();
+        intent_mpos.setClassName("com.bocs.mpos", "com.bocs.mpos.activity.SalesActivity");
+        Bundle bundle = new Bundle();
+        bundle.putString("sTransTypeInd", "15");
+        bundle.putString("sAmount", amount);
+        bundle.putString("sOrderNo", transId);
+        bundle.putString("sPhoneNO", phone);
+        bundle.putString("sEmailAddr", email);
+        bundle.putString("sCurrencyCode", "702");
+        bundle.putString("sRemark", "unionpay");
+
+        intent_mpos.putExtras(bundle);
+        this.cordova.startActivityForResult(this,intent_mpos, SALE);
+    }
 
     public void ocbcSale(JSONArray args) throws JSONException {
         String transaction_amount = args.getString(0);

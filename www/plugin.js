@@ -9,6 +9,11 @@ var ChinaBankPos = {
             exec(resolve, reject, PLUGIN_NAME, 'sale', [amount,transId,phone,email]);
         });
     },
+    bocUnionPay: function (amount,transId,phone,email) {
+        return new Promise(function (resolve, reject) {
+            exec(resolve, reject, PLUGIN_NAME, 'bocUnionPay', [amount,transId,phone,email]);
+        });
+    },
     refund: function (transId) {
         return new Promise(function (resolve, reject) {
             exec(resolve, reject, PLUGIN_NAME, 'refund', [transId]);
