@@ -1,11 +1,24 @@
 {
-  "name": "cordova-china-bank-pos-bluetooth",
-  "version": "1.0.3",
+  "name": "cordova-china-bank-ocbc",
+  "version": "1.0.2",
   "cordova": {
-    "id": "cordova-china-bank-pos-bluetooth",
+    "id": "cordova-china-bank-ocbc",
     "platforms": [
       "android"
     ]
   },
-  "description": "A starting point for a Cordova Plugin"
+  "description": "A starting point for a Cordova Plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "test"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "Shyma",
+  "license": "ISC"
 }

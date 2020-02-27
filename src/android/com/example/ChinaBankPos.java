@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.app.ActivityManager.RunningServiceInfo;
 
 public class ChinaBankPos extends CordovaPlugin {
+  //cordova-china-bank-pos-bluetooth
     private static final String TAG = "ChinaBankPos";
     public static final int RESULT_CANCELED = 0;
     public static final int RESULT_OK = -1;
@@ -171,13 +172,17 @@ public class ChinaBankPos extends CordovaPlugin {
     }
 
     public void ocbcSale(JSONArray args) throws JSONException {
-        String transaction_amount = args.getString(0);
-        String transaction_type = args.getString(1);
-        String command_identifier = args.getString(2);
-        String invoice_number = args.getString(3);
+        String app_name = args.getString(0);
+        String activity_name = args.getString(1);
+        String transaction_amount = args.getString(2);
+        String transaction_type = args.getString(3);
+        String command_identifier = args.getString(4);
+        String invoice_number = args.getString(5);
 
         Intent launchIntent = new Intent();
-        launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
+        launchIntent.setClassName(app_name, activity_name);
+      //  launchIntent.setClassName("sg.com.eftpos.mobilepos.ocbc", "sg.com.mobileeftpos.paymentapplication.ecr.EcrGatewayActivity");
+        //launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
         if (launchIntent != null) {
             launchIntent.setFlags(0);
             Bundle bundleApp = new Bundle();
@@ -213,11 +218,13 @@ public class ChinaBankPos extends CordovaPlugin {
 
     }
     public void ocbcVoid(JSONArray args) throws JSONException {
-        String invoice_number = args.getString(0);
-        String command_identifier = args.getString(1);
+      String app_name = args.getString(0);
+      String activity_name = args.getString(1);
+        String invoice_number = args.getString(2);
+        String command_identifier = args.getString(3);
 
         Intent launchIntent = new Intent();
-        launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
+        launchIntent.setClassName(app_name, activity_name);
         if (launchIntent != null) {
             launchIntent.setFlags(0);
             Bundle bundleApp = new Bundle();
@@ -244,11 +251,13 @@ public class ChinaBankPos extends CordovaPlugin {
         return jsonObject.toString();
     }
     public void ocbcRefund(JSONArray args) throws JSONException {
-        String transaction_amount = args.getString(0);
-        String command_identifier = args.getString(1);
+        String app_name = args.getString(0);
+        String activity_name = args.getString(1);
+        String transaction_amount = args.getString(2);
+        String command_identifier = args.getString(3);
 
         Intent launchIntent = new Intent();
-        launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
+        launchIntent.setClassName(app_name, activity_name);
         if (launchIntent != null) {
             launchIntent.setFlags(0);
             Bundle bundleApp = new Bundle();
@@ -274,12 +283,14 @@ public class ChinaBankPos extends CordovaPlugin {
         return jsonObject.toString();
     }
     public void ocbcSettlement(JSONArray args) throws JSONException {
-        String transaction_type = args.getString(0);
-        String command_identifier = args.getString(1);
+        String app_name = args.getString(0);
+        String activity_name = args.getString(1);
+        String transaction_type = args.getString(2);
+        String command_identifier = args.getString(3);
 
 
         Intent launchIntent = new Intent();
-        launchIntent.setClassName("sg.com.mobileeftpos.paymentapplication", "sg.com.mobileeftpos.paymentapplication.activities.ECRActivity");
+        launchIntent.setClassName(app_name, activity_name);
         if (launchIntent != null) {
             launchIntent.setFlags(0);
             Bundle bundleApp = new Bundle();

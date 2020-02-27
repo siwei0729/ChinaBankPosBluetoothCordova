@@ -29,24 +29,24 @@ var ChinaBankPos = {
                exec(resolve, reject, PLUGIN_NAME, 'checkMpos', [package]);
                 });
          },
-     ocbcSale: function (transaction_amount,transaction_type,command_identifier,invoice_number) {
+     ocbcSale: function (appName,activityName,transaction_amount,transaction_type,command_identifier,invoice_number) {
              return new Promise(function (resolve, reject) {
-                 exec(resolve, reject, PLUGIN_NAME, 'ocbcSale', [transaction_amount,transaction_type,command_identifier,invoice_number]);
+                 exec(resolve, reject, PLUGIN_NAME, 'ocbcSale', [appName,activityName,transaction_amount,transaction_type,command_identifier,invoice_number]);
              });
          },
-      ocbcVoid: function (inv_number,command_identifier) {
+      ocbcVoid: function (appName,activityName,inv_number,command_identifier) {
                 return new Promise(function (resolve, reject) {
-                  exec(resolve, reject, PLUGIN_NAME, 'ocbcVoid', [inv_number,command_identifier]);
+                  exec(resolve, reject, PLUGIN_NAME, 'ocbcVoid', [appName,activityName,inv_number,command_identifier]);
               });
           },
-      ocbcRefund: function (transaction_amount,command_identifier) {
+      ocbcRefund: function (appName,activityName,transaction_amount,command_identifier) {
                  return new Promise(function (resolve, reject) {
-                  exec(resolve, reject, PLUGIN_NAME, 'ocbcRefund', [transaction_amount,command_identifier]);
+                  exec(resolve, reject, PLUGIN_NAME, 'ocbcRefund', [appName,activityName,transaction_amount,command_identifier]);
                 });
           },
-      ocbcSettlement: function (transaction_type,command_identifier) {
+      ocbcSettlement: function (appName,activityName,transaction_type,command_identifier) {
                   return new Promise(function (resolve, reject) {
-                    exec(resolve, reject, PLUGIN_NAME, 'ocbcSettlement', [transaction_type,command_identifier]);
+                    exec(resolve, reject, PLUGIN_NAME, 'ocbcSettlement', [appName,activityName,transaction_type,command_identifier]);
                     });
               },
 };

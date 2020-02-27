@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-    id="cordova-china-bank-pos-bluetooth"
-    version="1.0.0">
+    id="cordova-china-bank-ocbc"
+    version="1.0.2">
     <name>Cordova China Bank Pos Bluetooth</name>
     <description>For Visa and master card transaction</description>
     <license>MIT</license>
     <keywords></keywords>
-    <repo>https://github.com/siwei0729/ChinaBankPosBluetoothCordova</repo>
+    <repo></repo>
     <issue></issue>
 
     <!-- android -->
