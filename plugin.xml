@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     id="cordova-china-bank-ocbc"
-    version="1.0.2">
+    version="1.0.3">
     <name>Cordova China Bank Pos Bluetooth</name>
     <description>For Visa and master card transaction</description>
     <license>MIT</license>

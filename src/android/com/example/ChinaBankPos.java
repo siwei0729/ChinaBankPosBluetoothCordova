@@ -37,7 +37,7 @@ public class ChinaBankPos extends CordovaPlugin {
     public static final int SALE = 1;
     public static final int REFUND = 2;
     public static final int LOGIN = 3;
-    public static final int OCBC=4;
+    public static final int ASCAN=4;
 
     private final DecimalFormat REAL_FORMATTER = new DecimalFormat("0.00");
 
@@ -65,17 +65,17 @@ public class ChinaBankPos extends CordovaPlugin {
         else if (action.equals("checkMpos")){
            checkMpos(this.cordova.getActivity().getApplicationContext());
         }
-        else if (action.equals("ocbcSale")){
-            ocbcSale(args);
+        else if (action.equals("ascanSale")){
+            ascanSale(args);
         }
-        else if (action.equals("ocbcVoid")){
-            ocbcVoid(args);
+        else if (action.equals("ascanVoid")){
+            ascanVoid(args);
         }
-        else if (action.equals("ocbcRefund")){
-            ocbcRefund(args);
+        else if (action.equals("ascanRefund")){
+            ascanRefund(args);
         }
-        else if (action.equals("ocbcSettlement")){
-            ocbcSettlement(args);
+        else if (action.equals("ascanSettlement")){
+            ascanSettlement(args);
         }
         return true;
     }
@@ -171,7 +171,7 @@ public class ChinaBankPos extends CordovaPlugin {
         this.cordova.startActivityForResult(this,intent_mpos, SALE);
     }
 
-    public void ocbcSale(JSONArray args) throws JSONException {
+    public void ascanSale(JSONArray args) throws JSONException {
         String app_name = args.getString(0);
         String activity_name = args.getString(1);
         String transaction_amount = args.getString(2);
@@ -188,7 +188,7 @@ public class ChinaBankPos extends CordovaPlugin {
             Bundle bundleApp = new Bundle();
             bundleApp.putString("Request", getSaleObject(transaction_amount,transaction_type,command_identifier));
             launchIntent.putExtras(bundleApp);
-            this.cordova.startActivityForResult(this,launchIntent, OCBC);
+            this.cordova.startActivityForResult(this,launchIntent, ASCAN);
           }
 
     }
@@ -217,7 +217,7 @@ public class ChinaBankPos extends CordovaPlugin {
         return REAL_FORMATTER.format(l);
 
     }
-    public void ocbcVoid(JSONArray args) throws JSONException {
+    public void ascanVoid(JSONArray args) throws JSONException {
       String app_name = args.getString(0);
       String activity_name = args.getString(1);
         String invoice_number = args.getString(2);
@@ -230,7 +230,7 @@ public class ChinaBankPos extends CordovaPlugin {
             Bundle bundleApp = new Bundle();
             bundleApp.putString("Request", getVoidObject(invoice_number,command_identifier));
             launchIntent.putExtras(bundleApp);
-            this.cordova.startActivityForResult(this,launchIntent, OCBC);
+            this.cordova.startActivityForResult(this,launchIntent, ASCAN);
           }
 
     }
@@ -250,7 +250,7 @@ public class ChinaBankPos extends CordovaPlugin {
 
         return jsonObject.toString();
     }
-    public void ocbcRefund(JSONArray args) throws JSONException {
+    public void ascanRefund(JSONArray args) throws JSONException {
         String app_name = args.getString(0);
         String activity_name = args.getString(1);
         String transaction_amount = args.getString(2);
@@ -263,7 +263,7 @@ public class ChinaBankPos extends CordovaPlugin {
             Bundle bundleApp = new Bundle();
             bundleApp.putString("Request", getRefundObject(transaction_amount,command_identifier));
             launchIntent.putExtras(bundleApp);
-            this.cordova.startActivityForResult(this,launchIntent, OCBC);
+            this.cordova.startActivityForResult(this,launchIntent, ASCAN);
           }
 
     }
@@ -282,7 +282,7 @@ public class ChinaBankPos extends CordovaPlugin {
 
         return jsonObject.toString();
     }
-    public void ocbcSettlement(JSONArray args) throws JSONException {
+    public void ascanSettlement(JSONArray args) throws JSONException {
         String app_name = args.getString(0);
         String activity_name = args.getString(1);
         String transaction_type = args.getString(2);
@@ -296,7 +296,7 @@ public class ChinaBankPos extends CordovaPlugin {
             Bundle bundleApp = new Bundle();
             bundleApp.putString("Request", getSettlementObject(transaction_type,command_identifier));
             launchIntent.putExtras(bundleApp);
-            this.cordova.startActivityForResult(this,launchIntent, OCBC);
+            this.cordova.startActivityForResult(this,launchIntent, ASCAN);
           }
 
     }
@@ -338,7 +338,7 @@ public class ChinaBankPos extends CordovaPlugin {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == OCBC){
+        if(requestCode == ASCAN){
             if (resultCode == RESULT_CANCELED) {
                 callbackContext.error("User Canceled");
             }else if (resultCode == RESULT_OK) {

@@ -29,24 +29,24 @@ var ChinaBankPos = {
                exec(resolve, reject, PLUGIN_NAME, 'checkMpos', [package]);
                 });
          },
-     ocbcSale: function (appName,activityName,transaction_amount,transaction_type,command_identifier,invoice_number) {
+     ascanSale: function (appName,activityName,transaction_amount,transaction_type,command_identifier,invoice_number) {
              return new Promise(function (resolve, reject) {
-                 exec(resolve, reject, PLUGIN_NAME, 'ocbcSale', [appName,activityName,transaction_amount,transaction_type,command_identifier,invoice_number]);
+                 exec(resolve, reject, PLUGIN_NAME, 'ascanSale', [appName,activityName,transaction_amount,transaction_type,command_identifier,invoice_number]);
              });
          },
-      ocbcVoid: function (appName,activityName,inv_number,command_identifier) {
+      ascanVoid: function (appName,activityName,inv_number,command_identifier) {
                 return new Promise(function (resolve, reject) {
-                  exec(resolve, reject, PLUGIN_NAME, 'ocbcVoid', [appName,activityName,inv_number,command_identifier]);
+                  exec(resolve, reject, PLUGIN_NAME, 'ascanVoid', [appName,activityName,inv_number,command_identifier]);
               });
           },
-      ocbcRefund: function (appName,activityName,transaction_amount,command_identifier) {
+      ascanRefund: function (appName,activityName,transaction_amount,command_identifier) {
                  return new Promise(function (resolve, reject) {
-                  exec(resolve, reject, PLUGIN_NAME, 'ocbcRefund', [appName,activityName,transaction_amount,command_identifier]);
+                  exec(resolve, reject, PLUGIN_NAME, 'ascanRefund', [appName,activityName,transaction_amount,command_identifier]);
                 });
           },
-      ocbcSettlement: function (appName,activityName,transaction_type,command_identifier) {
+      ascanSettlement: function (appName,activityName,transaction_type,command_identifier) {
                   return new Promise(function (resolve, reject) {
-                    exec(resolve, reject, PLUGIN_NAME, 'ocbcSettlement', [appName,activityName,transaction_type,command_identifier]);
+                    exec(resolve, reject, PLUGIN_NAME, 'ascanSettlement', [appName,activityName,transaction_type,command_identifier]);
                     });
               },
 };

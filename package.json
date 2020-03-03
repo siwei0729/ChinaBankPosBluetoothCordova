@@ -1,6 +1,6 @@
 {
   "name": "cordova-china-bank-ocbc",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "cordova": {
     "id": "cordova-china-bank-ocbc",
     "platforms": [
